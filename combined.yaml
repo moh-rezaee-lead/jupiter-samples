@@ -1,0 +1,57 @@
+# This is an example of a deployment - a declaration of pods.
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: "go-boldly-deployment"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "go-boldly"
+  template:
+    metadata:
+      labels:
+        app: "go-boldly"
+    spec:
+      containers:
+        - image: "nginx:alpine"
+          name: nginx
+          ports:
+            - containerPort: 80
+ 
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    prometheus.io/scrape: "true"
+  name: "go-boldly-service"
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: "go-boldly"
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    "kubernetes.io/tls-acme": "true"
+  name: "go-boldly-ingress"
+spec:
+  rules:
+    - host: "go-boldly.svc.platform.myobdev.com"
+      http:
+        paths:
+          - backend:
+              serviceName: "go-boldly-service"
+              servicePort: 80
+            path: /
+  tls:
+    - hosts:
+        - "go-boldly.svc.platform.myobdev.com"
+      secretName: "go-boldly-tls"

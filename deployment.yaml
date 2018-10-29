@@ -1,0 +1,22 @@
+# This is an example of a deployment - a declaration of pods.
+---
+apiVersion: apps/v1beta2
+kind: Deployment
+metadata:
+  name: "go-boldly-deployment"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: "go-boldly"
+  template:
+    metadata:
+      labels:
+        app: "go-boldly"
+    spec:
+      containers:
+        - image: "nginx:alpine"
+          name: nginx
+          ports:
+            - containerPort: 80
+ 

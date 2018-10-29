@@ -1,0 +1,20 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    "kubernetes.io/tls-acme": "true"
+  name: "go-boldly-ingress"
+spec:
+  rules:
+    - host: "go-boldly.svc.platform.myobdev.com"
+      http:
+        paths:
+          - backend:
+              serviceName: "go-boldly-service"
+              servicePort: 80
+            path: /
+  tls:
+    - hosts:
+        - "go-boldly.svc.platform.myobdev.com"
+      secretName: "go-boldly-tls"
